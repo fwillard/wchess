@@ -1,8 +1,13 @@
 mod board;
-use board::Board;
+mod util;
+
 
 fn main() {
-    println!("Hello, world!");
+    
+    let b = board::Board::new();
 
-    let b = Board::new();
+    b.print_board();
+
+    // util::bit_is_set(0xffff, 0);
+
 }
