@@ -83,23 +83,23 @@ pub mod shift {
         return b >> 8;
     }
     pub fn east_one(b: u64) -> u64 {
-        return (b << 1) & !A_FILE;
+        return (b >> 1) & !A_FILE;
     }
     pub fn west_one(b: u64) -> u64 {
-        return (b >> 1) & !H_FILE;
+        return (b << 1) & !H_FILE;
     }
 
     //ordinal directions
     pub fn north_east_one(b: u64) -> u64 {
-        return (b << 9) & !A_FILE;
+        return (b << 7) & !A_FILE;
     }
     pub fn south_east_one(b: u64) -> u64 {
-        return (b >> 7) & !A_FILE;
+        return (b >> 9) & !A_FILE;
     }
     pub fn north_west_one(b: u64) -> u64 {
-        return (b << 7) & !H_FILE;
+        return (b << 9) & !H_FILE;
     }
     pub fn south_west_one(b: u64) -> u64 {
-        return (b >> 9) & !H_FILE;
+        return (b >> 7) & !H_FILE;
     }
 }
