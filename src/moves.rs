@@ -28,23 +28,38 @@ enum PieceType {
     King,
 }
 lazy_static! {
-    static ref ATTACK_TABLE: HashMap<PieceType, [u64; 64]> = generate_attack_table();
+    static ref KNIGHT_ATTACKS: [u64; 64] = generate_knight_attacks();
 }
-fn generate_attack_table() -> HashMap<PieceType, [u64; 64]> {
-    let mut attack_table = HashMap::new();
+pub fn generate_moves() {}
 
-    //Generate pawn moves for each space
-    let pawn_moves = [0; 64];
-    attack_table.insert(PieceType::Pawn, pawn_moves);
-
-    //Generate knight moves for each space
-    let knight_moves = [0; 64];
-    attack_table.insert(PieceType::Knight, knight_moves);
-
+fn generate_knight_attacks() -> [u64; 64] {
+    let mut attack_table = [0; 64];
+    for i in 0..64 {
+        let pos = 1 << i;
+        let attacked = knight_attacks(pos);
+        attack_table[i] = attacked;
+        println!();
+    }
     return attack_table;
 }
 
-pub fn pawn_push_targets(pos: Board, side: Color) -> u64 {
+fn knight_attacks(pos: u64) -> u64 {
+    let mut east = shift::east_one(pos);
+    let mut west = shift::west_one(pos);
+    let mut attacks = (east | west) << 16;
+    attacks |= (east | west) >> 16;
+
+    // util::print_bitboard(&attacks);
+
+    east = shift::east_one(east);
+    west = shift::west_one(west);
+    attacks |= (east | west) << 8;
+    attacks |= (east | west) >> 8;
+
+    return attacks;
+}
+
+fn pawn_push_targets(pos: Board, side: Color) -> u64 {
     let empty = !pos.all_pieces();
 
     match side {
