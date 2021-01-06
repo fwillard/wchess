@@ -1,27 +1,36 @@
-use crate::board::Board;
-use crate::util::Color;
-use crate::util::shift;
-use crate::util;
+use std::collections::HashMap;
 
-struct Move{
+use crate::board::Board;
+use crate::util;
+use crate::util::shift;
+use crate::util::Color;
+
+struct Move {
     from: u8,
     to: u8,
-    move_type: MoveType 
+    move_type: MoveType,
 }
 
-enum MoveType{
+enum MoveType {
     Quiet,
     Capture,
     EnPassant,
     Castle
 }
+enum PieceType {
+    Pawn,
+    Rook,
+    Knight,
+    Bishop,
+    Queen,
+    King
+}
+const attacks_map: HashMap<PieceType, [u64; 64]> = generate_attack_table();
+const fn generate_attack_table() -> HashMap<PieceType, [u64; 64]{
 
-// pub fn gen_moves(pos: Board) -> Vec<Move> {
-
-// }
+}
 
 pub fn pawn_push_targets(pos: Board, side: Color) -> u64 {
-
     let empty = !pos.all_pieces();
 
     match side {
