@@ -15,19 +15,33 @@ enum MoveType {
     Quiet,
     Capture,
     EnPassant,
-    Castle
+    Castle,
 }
+
+#[derive(PartialEq, Eq, Hash)]
 enum PieceType {
     Pawn,
     Rook,
     Knight,
     Bishop,
     Queen,
-    King
+    King,
 }
-const attacks_map: HashMap<PieceType, [u64; 64]> = generate_attack_table();
-const fn generate_attack_table() -> HashMap<PieceType, [u64; 64]{
+lazy_static! {
+    static ref ATTACK_TABLE: HashMap<PieceType, [u64; 64]> = generate_attack_table();
+}
+fn generate_attack_table() -> HashMap<PieceType, [u64; 64]> {
+    let mut attack_table = HashMap::new();
 
+    //Generate pawn moves for each space
+    let pawn_moves = [0; 64];
+    attack_table.insert(PieceType::Pawn, pawn_moves);
+
+    //Generate knight moves for each space
+    let knight_moves = [0; 64];
+    attack_table.insert(PieceType::Knight, knight_moves);
+
+    return attack_table;
 }
 
 pub fn pawn_push_targets(pos: Board, side: Color) -> u64 {
