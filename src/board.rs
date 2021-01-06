@@ -1,22 +1,19 @@
 use crate::util;
 ///Stores the board state as a set of bitboards
+#[derive(Copy, Clone)]
 pub struct Board{
-    white_pieces: Pieces,
-    black_pieces: Pieces
+    pub white_pieces: Pieces,
+    pub black_pieces: Pieces
 }
 
-struct Pieces{
-    pawns: u64,
-    rooks: u64,
-    knights: u64,
-    bishops: u64,
-    queens: u64,
-    king: u64
-}
-
-enum Side{
-     Black,
-     White
+#[derive(Copy, Clone)]
+pub struct Pieces{
+    pub pawns: u64,
+    pub rooks: u64,
+    pub knights: u64,
+    pub bishops: u64,
+    pub queens: u64,
+    pub king: u64
 }
 
 impl Board{
@@ -50,40 +47,40 @@ impl Board{
         print!("{}|", rowcount);
         for i in (0..64).rev() {
             print!(" ");
-            if util::bit_is_set(self.white_pieces.pawns, i) {
+            if util::bit_is_set(&self.white_pieces.pawns, i) {
                 print!("p");
             }
-            else if util::bit_is_set(self.white_pieces.rooks, i){
+            else if util::bit_is_set(&self.white_pieces.rooks, i){
                 print!("r");
             }
-            else if util::bit_is_set(self.white_pieces.knights, i){
+            else if util::bit_is_set(&self.white_pieces.knights, i){
                 print!("n");
             }
-            else if util::bit_is_set(self.white_pieces.bishops, i){
+            else if util::bit_is_set(&self.white_pieces.bishops, i){
                 print!("b");
             }
-            else if util::bit_is_set(self.white_pieces.queens, i){
+            else if util::bit_is_set(&self.white_pieces.queens, i){
                 print!("q");
             }
-            else if util::bit_is_set(self.white_pieces.king, i){
+            else if util::bit_is_set(&self.white_pieces.king, i){
                 print!("k");
             }
-            else if util::bit_is_set(self.black_pieces.pawns, i) {
+            else if util::bit_is_set(&self.black_pieces.pawns, i) {
                 print!("P");
             }
-            else if util::bit_is_set(self.black_pieces.rooks, i){
+            else if util::bit_is_set(&self.black_pieces.rooks, i){
                 print!("R");
             }
-            else if util::bit_is_set(self.black_pieces.knights, i){
+            else if util::bit_is_set(&self.black_pieces.knights, i){
                 print!("N");
             }
-            else if util::bit_is_set(self.black_pieces.bishops, i){
+            else if util::bit_is_set(&self.black_pieces.bishops, i){
                 print!("B");
             }
-            else if util::bit_is_set(self.black_pieces.queens, i){
+            else if util::bit_is_set(&self.black_pieces.queens, i){
                 print!("Q");
             }
-            else if util::bit_is_set(self.black_pieces.king, i){
+            else if util::bit_is_set(&self.black_pieces.king, i){
                 print!("K");
             }
             else {
@@ -100,19 +97,16 @@ impl Board{
 
         println!(" | A\u{0305}‾B\u{0305}‾C\u{0305}‾D\u{0305}‾E\u{0305}‾F\u{0305}‾G\u{0305}‾H\u{0305} | ");
     }
-    fn gen_moves(&self, s: Side){
-
+    ///Returns a bitboard with the location of all the white pieces
+    pub fn white_pieces(&self) -> u64 {
+        return self.white_pieces.pawns | self.white_pieces.rooks | self.white_pieces.knights | self.white_pieces.bishops | self.white_pieces.queens | self.white_pieces.king;
     }
-    // ///Returns a bitboard with the location of all the white pieces
-    // fn white_pieces(&self) -> u64 {
-    //     return self.white_pawns | self.white_rooks | self.white_knights | self.white_bishops | self.white_queen | self.white_king;
-    // }
-    // ///Returns a bitboard with the location of all the black pieces
-    // fn black_pieces(&self) -> u64 {
-    //     return self.black_pawns | self.black_rooks | self.black_knights | self.black_bishops | self.black_queen | self.black_king;
-    // }
-    // ///Returns a bitboard with the location of all pieces
-    // fn all_pieces(&self) -> u64{
-    //     return self.white_pieces() | self.black_pieces();
-    // }
+    ///Returns a bitboard with the location of all the black pieces
+    pub fn black_pieces(&self) -> u64 {
+        return self.black_pieces.pawns | self.black_pieces.rooks | self.black_pieces.knights | self.black_pieces.bishops | self.black_pieces.queens | self.black_pieces.king;
+    }
+    ///Returns a bitboard with the location of all pieces
+    pub fn all_pieces(&self) -> u64{
+        return self.white_pieces() | self.black_pieces();
+    }
 }
