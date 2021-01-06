@@ -28,7 +28,8 @@ enum PieceType {
     King,
 }
 lazy_static! {
-    static ref KNIGHT_ATTACKS: [u64; 64] = generate_knight_attacks();
+    pub static ref KNIGHT_ATTACKS: [u64; 64] = generate_knight_attacks();
+    pub static ref KING_ATTACKS: [u64; 64] = generate_king_attacks();
 }
 pub fn generate_moves() {}
 
@@ -41,6 +42,31 @@ fn generate_knight_attacks() -> [u64; 64] {
         println!();
     }
     return attack_table;
+}
+
+fn generate_king_attacks() -> [u64; 64] {
+    let mut attack_table = [0; 64];
+    for i in 0..64 {
+        let pos = 1 << i;
+        let attacked = king_attacks(pos);
+        attack_table[i] = attacked;
+        println!();
+    }
+    return attack_table;
+}
+
+fn king_attacks(pos: u64) -> u64 {
+    let north = shift::north_one(pos);
+    let south = shift::south_one(pos);
+    let east = shift::east_one(pos);
+    let west = shift::west_one(pos);
+
+    let north_east = shift::north_east_one(pos);
+    let north_west = shift::north_west_one(pos);
+    let south_east = shift::south_east_one(pos);
+    let south_west = shift::south_west_one(pos);
+
+    return north | south | east | west | north_east | north_west | south_east | south_west;
 }
 
 fn knight_attacks(pos: u64) -> u64 {
