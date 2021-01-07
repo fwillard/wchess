@@ -1,7 +1,6 @@
-//General utility functions
+use regex::Regex;
 
 //bitboard constants
-
 // Empty set
 pub const EMPTY: u64 = 0;
 
@@ -29,15 +28,42 @@ pub const RANK_7: u64 = 0x00ff000000000000;
 pub const RANK_8: u64 = 0xff00000000000000;
 
 //Enums
+#[derive(Copy, Clone, Debug)]
 pub enum Color {
     Black,
     White,
 }
 
 ///checks if kth bit is set in n
-pub fn bit_is_set(n: &u64, k: u8) -> bool {
+pub fn bit_is_set(n: &u64, k: usize) -> bool {
     let set = 0 != n & (1 << k);
     return set;
+}
+
+pub const fn set_bit(n: u64, k: usize) -> u64 {
+    return n | 1 << k;
+}
+
+pub fn algebraic_to_index(s: &str) -> u64 {
+    let re = Regex::new(r"(?P<file>[a-h])(?P<rank>[1-8])").unwrap();
+
+    let caps = re.captures(s).unwrap();
+    let file = caps.name("file").unwrap().as_str();
+    let rank = caps.name("rank").unwrap().as_str();
+
+    let file = file.to_uppercase().chars().next().unwrap() as u64 - 64;
+    let rank = rank.parse::<u64>().unwrap();
+    return 8 * (rank - 1) + (8 - file);
+}
+
+pub fn index_to_algebraic(n: u64) -> String {
+    let rank = (n / 8 + 1) as u8;
+    let file = (7 - (n % 8)) as u8;
+    let mut s = String::from("");
+
+    s.push((file + 0x61) as char);
+    s.push((rank + 0x30) as char);
+    return s;
 }
 
 pub fn print_bitboard(b: &u64) {
