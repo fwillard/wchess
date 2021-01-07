@@ -44,6 +44,10 @@ pub const fn set_bit(n: u64, k: usize) -> u64 {
     return n | 1 << k;
 }
 
+pub const fn unset_bit(n: u64, k: usize) -> u64 {
+    return n & !(1 << k);
+}
+
 pub fn algebraic_to_index(s: &str) -> u64 {
     let re = Regex::new(r"(?P<file>[a-h])(?P<rank>[1-8])").unwrap();
 
@@ -127,5 +131,28 @@ pub mod shift {
     }
     pub fn south_west_one(b: u64) -> u64 {
         return (b >> 7) & !H_FILE;
+    }
+
+    pub fn rank_mask(sq: usize) -> u64 {
+        return 0xff << (sq & 56);
+    }
+    pub fn file_mask(sq: usize) -> u64 {
+        return 0x0101010101010101 << (sq & 7);
+    }
+    pub fn diag_mask(sq: usize) -> u64 {
+        const MAIN_DIAG: u64 = 0x8040201008040201;
+        let sq = sq as isize;
+        let diag = 8 * (sq & 7) - (sq & 56);
+        let north = -diag & (diag >> 31);
+        let south = diag & (-diag >> 31);
+        return (MAIN_DIAG >> south) << north;
+    }
+    pub fn anti_diag_mask(sq: usize) -> u64 {
+        const MAIN_DIAG: u64 = 0x0102040810204080;
+        let sq = sq as isize;
+        let diag = 56 - 8 * (sq & 7) - (sq & 56);
+        let nort = -diag & (diag >> 31);
+        let sout = diag & (-diag >> 31);
+        return (MAIN_DIAG >> sout) << nort;
     }
 }
