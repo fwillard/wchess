@@ -1,11 +1,9 @@
-use std::collections::HashMap;
-
 use crate::board::Board;
 use crate::util;
 use crate::util::shift;
 use crate::util::Color;
 
-struct Move {
+pub struct Move {
     from: u8,
     to: u8,
     move_type: MoveType,
@@ -18,15 +16,6 @@ enum MoveType {
     Castle,
 }
 
-#[derive(PartialEq, Eq, Hash)]
-enum PieceType {
-    Pawn,
-    Rook,
-    Knight,
-    Bishop,
-    Queen,
-    King,
-}
 lazy_static! {
     pub static ref KNIGHT_ATTACKS: [u64; 64] = generate_knight_attacks();
     pub static ref KING_ATTACKS: [u64; 64] = generate_king_attacks();
