@@ -19,8 +19,11 @@ enum MoveType {
 lazy_static! {
     pub static ref KNIGHT_ATTACKS: [u64; 64] = generate_knight_attacks();
     pub static ref KING_ATTACKS: [u64; 64] = generate_king_attacks();
+    // pub static ref PAWN_ATTACKS: [u64; 64] = generate_pawn_attacks();
 }
-pub fn generate_moves() {}
+pub fn generate_moves(pos: Board) {
+    // let
+}
 
 fn generate_knight_attacks() -> [u64; 64] {
     let mut attack_table = [0; 64];
@@ -31,6 +34,22 @@ fn generate_knight_attacks() -> [u64; 64] {
         println!();
     }
     return attack_table;
+}
+
+fn knight_attacks(pos: u64) -> u64 {
+    let mut east = shift::east_one(pos);
+    let mut west = shift::west_one(pos);
+    let mut attacks = (east | west) << 16;
+    attacks |= (east | west) >> 16;
+
+    // util::print_bitboard(&attacks);
+
+    east = shift::east_one(east);
+    west = shift::west_one(west);
+    attacks |= (east | west) << 8;
+    attacks |= (east | west) >> 8;
+
+    return attacks;
 }
 
 fn generate_king_attacks() -> [u64; 64] {
@@ -56,22 +75,6 @@ fn king_attacks(pos: u64) -> u64 {
     let south_west = shift::south_west_one(pos);
 
     return north | south | east | west | north_east | north_west | south_east | south_west;
-}
-
-fn knight_attacks(pos: u64) -> u64 {
-    let mut east = shift::east_one(pos);
-    let mut west = shift::west_one(pos);
-    let mut attacks = (east | west) << 16;
-    attacks |= (east | west) >> 16;
-
-    // util::print_bitboard(&attacks);
-
-    east = shift::east_one(east);
-    west = shift::west_one(west);
-    attacks |= (east | west) << 8;
-    attacks |= (east | west) >> 8;
-
-    return attacks;
 }
 
 fn pawn_push_targets(pos: Board, side: Color) -> u64 {
