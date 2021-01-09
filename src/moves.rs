@@ -9,6 +9,12 @@ pub struct Move {
     move_type: MoveType,
 }
 
+struct Magic {
+    mask: u64,
+    magic: u64,
+    attacks: u64,
+}
+
 enum MoveType {
     Quiet,
     Capture,
@@ -16,67 +22,16 @@ enum MoveType {
     Castle,
 }
 
-lazy_static! {
-    pub static ref KNIGHT_ATTACKS: [u64; 64] = generate_knight_attacks();
-    pub static ref KING_ATTACKS: [u64; 64] = generate_king_attacks();
-    // pub static ref PAWN_ATTACKS: [u64; 64] = generate_pawn_attacks();
-}
-pub fn generate_moves(pos: Board) {
-    // let
-}
+//sliding pieces
+// fn generate_rook_magic() {
+//     for i in 0..64 {
+//         let m = Magic{
+//             mask:
+//         }
+//     }
+// }
 
-fn generate_knight_attacks() -> [u64; 64] {
-    let mut attack_table = [0; 64];
-    for i in 0..64 {
-        let pos = 1 << i;
-        let attacked = knight_attacks(pos);
-        attack_table[i] = attacked;
-        println!();
-    }
-    return attack_table;
-}
-
-fn knight_attacks(pos: u64) -> u64 {
-    let mut east = shift::east_one(pos);
-    let mut west = shift::west_one(pos);
-    let mut attacks = (east | west) << 16;
-    attacks |= (east | west) >> 16;
-
-    // util::print_bitboard(&attacks);
-
-    east = shift::east_one(east);
-    west = shift::west_one(west);
-    attacks |= (east | west) << 8;
-    attacks |= (east | west) >> 8;
-
-    return attacks;
-}
-
-fn generate_king_attacks() -> [u64; 64] {
-    let mut attack_table = [0; 64];
-    for i in 0..64 {
-        let pos = 1 << i;
-        let attacked = king_attacks(pos);
-        attack_table[i] = attacked;
-        println!();
-    }
-    return attack_table;
-}
-
-fn king_attacks(pos: u64) -> u64 {
-    let north = shift::north_one(pos);
-    let south = shift::south_one(pos);
-    let east = shift::east_one(pos);
-    let west = shift::west_one(pos);
-
-    let north_east = shift::north_east_one(pos);
-    let north_west = shift::north_west_one(pos);
-    let south_east = shift::south_east_one(pos);
-    let south_west = shift::south_west_one(pos);
-
-    return north | south | east | west | north_east | north_west | south_east | south_west;
-}
-
+//pawn moves & attacks
 fn pawn_push_targets(pos: Board, side: Color) -> u64 {
     let empty = !pos.all_pieces();
 
