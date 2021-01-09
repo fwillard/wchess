@@ -1,16 +1,16 @@
 lazy_static! {
-    static ref KNIGHT_ATTACKS: [u64; 64] = generate_knight_attacks();
-    static ref KING_ATTACKS: [u64; 64] = generate_king_attacks();
+    static ref KNIGHT_ATTACKS: [u64; 64] = init_knight_attacks();
+    static ref KING_ATTACKS: [u64; 64] = init_king_attacks();
 
-    static ref ROOK_MASK: [u64; 64] = generate_rook_mask();
-    static ref BISHOP_MASK: [u64; 64] = generate_bishop_mask();
+    static ref ROOK_MASK: [u64; 64] = init_rook_mask();
+    static ref BISHOP_MASK: [u64; 64] = init_bishop_mask();
 
     // static ref ROOK_MAGICS: [Magic; 64];
     // static ref BISHOP_MAGICS: [Magic; 64];
 }
 
 //rooks
-fn generate_rook_mask() -> [u64; 64] {
+fn init_rook_mask() -> [u64; 64] {
     let mut attack_table = [0; 64];
     for i in 0..64 {
         let attacked = rook_masks(i);
@@ -29,7 +29,7 @@ fn rook_masks(sq: usize) -> u64 {
 }
 
 // bishops
-fn generate_bishop_mask() -> [u64; 64] {
+fn init_bishop_mask() -> [u64; 64] {
     let mut attack_table = [0; 64];
     for i in 0..64 {
         let attacked = bishop_masks(i);
@@ -46,7 +46,7 @@ fn bishop_masks(sq: usize) -> u64 {
 fn bishop_attacks(sq: usize, blockers: u64) {}
 
 // //queen
-// fn generate_queen_mask() -> [u64; 64] {
+// fn init_queen_mask() -> [u64; 64] {
 //     let mut attack_table = [0; 64];
 //     for i in 0..64 {
 //         let attacked = ROOK_MASK[i] | BISHOP_MASK[i];
@@ -56,7 +56,7 @@ fn bishop_attacks(sq: usize, blockers: u64) {}
 //     return attack_table;
 // }
 //knight attacks
-fn generate_knight_attacks() -> [u64; 64] {
+fn init_knight_attacks() -> [u64; 64] {
     let mut attack_table = [0; 64];
     for i in 0..64 {
         let pos = 1 << i;
@@ -84,7 +84,7 @@ fn knight_attacks(pos: u64) -> u64 {
 }
 
 //king attacks
-fn generate_king_attacks() -> [u64; 64] {
+fn init_king_attacks() -> [u64; 64] {
     let mut attack_table = [0; 64];
     for i in 0..64 {
         let pos = 1 << i;
