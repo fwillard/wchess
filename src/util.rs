@@ -1,31 +1,5 @@
+//! General utility functions
 use regex::Regex;
-
-//bitboard constants
-// Empty set
-pub const EMPTY: u64 = 0;
-
-// Universe set
-pub const UNIVERSAL: u64 = 0xffffffffffffffff;
-
-//Chessboard Files
-pub const A_FILE: u64 = 0x8080808080808080;
-pub const B_FILE: u64 = 0x4040404040404040;
-pub const C_FILE: u64 = 0x2020202020202020;
-pub const D_FILE: u64 = 0x1010101010101010;
-pub const E_FILE: u64 = 0x0808080808080808;
-pub const F_FILE: u64 = 0x0404040404040404;
-pub const G_FILE: u64 = 0x0202020202020202;
-pub const H_FILE: u64 = 0x0101010101010101;
-
-//Chessboard ranks
-pub const RANK_1: u64 = 0x00000000000000ff;
-pub const RANK_2: u64 = 0x000000000000ff00;
-pub const RANK_3: u64 = 0x0000000000ff0000;
-pub const RANK_4: u64 = 0x00000000ff000000;
-pub const RANK_5: u64 = 0x000000ff00000000;
-pub const RANK_6: u64 = 0x0000ff0000000000;
-pub const RANK_7: u64 = 0x00ff000000000000;
-pub const RANK_8: u64 = 0xff00000000000000;
 
 //Enums
 #[derive(Copy, Clone, Debug)]
@@ -70,6 +44,10 @@ pub fn index_to_algebraic(n: u64) -> String {
     return s;
 }
 
+pub fn get_square_index(rank: usize, file: usize) -> usize {
+    return 8 * rank + (8 - file);
+}
+
 pub fn print_bitboard(b: &u64) {
     println!(
         " | A\u{0332}_B\u{0332}_C\u{0332}_D\u{0332}_E\u{0332}_F\u{0332}_G\u{0332}_H\u{0332} | "
@@ -101,58 +79,30 @@ pub fn print_bitboard(b: &u64) {
     );
 }
 
-pub mod shift {
-    use crate::util::A_FILE;
-    use crate::util::H_FILE;
+// pub mod shift {
+//     use ::bitutil::A_FILE;
+//     use ::bitutil::H_FILE;
 
-    //cardinal directions
-    pub fn north_one(b: u64) -> u64 {
-        return b << 8;
-    }
-    pub fn south_one(b: u64) -> u64 {
-        return b >> 8;
-    }
-    pub fn east_one(b: u64) -> u64 {
-        return (b >> 1) & !A_FILE;
-    }
-    pub fn west_one(b: u64) -> u64 {
-        return (b << 1) & !H_FILE;
-    }
-
-    //ordinal directions
-    pub fn north_east_one(b: u64) -> u64 {
-        return (b << 7) & !A_FILE;
-    }
-    pub fn south_east_one(b: u64) -> u64 {
-        return (b >> 9) & !A_FILE;
-    }
-    pub fn north_west_one(b: u64) -> u64 {
-        return (b << 9) & !H_FILE;
-    }
-    pub fn south_west_one(b: u64) -> u64 {
-        return (b >> 7) & !H_FILE;
-    }
-
-    pub fn rank_mask(sq: usize) -> u64 {
-        return 0xff << (sq & 56);
-    }
-    pub fn file_mask(sq: usize) -> u64 {
-        return 0x0101010101010101 << (sq & 7);
-    }
-    pub fn diag_mask(sq: usize) -> u64 {
-        const MAIN_DIAG: u64 = 0x8040201008040201;
-        let sq = sq as isize;
-        let diag = 8 * (sq & 7) - (sq & 56);
-        let north = -diag & (diag >> 31);
-        let south = diag & (-diag >> 31);
-        return (MAIN_DIAG >> south) << north;
-    }
-    pub fn anti_diag_mask(sq: usize) -> u64 {
-        const MAIN_DIAG: u64 = 0x0102040810204080;
-        let sq = sq as isize;
-        let diag = 56 - 8 * (sq & 7) - (sq & 56);
-        let nort = -diag & (diag >> 31);
-        let sout = diag & (-diag >> 31);
-        return (MAIN_DIAG >> sout) << nort;
-    }
-}
+//     pub fn rank_mask(sq: usize) -> u64 {
+//         return 0xff << (sq & 56);
+//     }
+//     pub fn file_mask(sq: usize) -> u64 {
+//         return 0x0101010101010101 << (sq & 7);
+//     }
+//     pub fn diag_mask(sq: usize) -> u64 {
+//         const MAIN_DIAG: u64 = 0x8040201008040201;
+//         let sq = sq as isize;
+//         let diag = 8 * (sq & 7) - (sq & 56);
+//         let north = -diag & (diag >> 31);
+//         let south = diag & (-diag >> 31);
+//         return (MAIN_DIAG >> south) << north;
+//     }
+//     pub fn anti_diag_mask(sq: usize) -> u64 {
+//         const MAIN_DIAG: u64 = 0x0102040810204080;
+//         let sq = sq as isize;
+//         let diag = 56 - 8 * (sq & 7) - (sq & 56);
+//         let nort = -diag & (diag >> 31);
+//         let sout = diag & (-diag >> 31);
+//         return (MAIN_DIAG >> sout) << nort;
+//     }
+// }
